@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1098093977884",
+    "project_id": "xbcad-eebe4",
+    "storage_bucket": "xbcad-eebe4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098093977884:android:f5feb3350e50a2c116dad9",
+        "android_client_info": {
+          "package_name": "com.flutterflow.xbcad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1098093977884-4m4ftuulju36isqtf5o8rhcmd1tb84m2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flutterflow.xbcad",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "1098093977884-tiqf1avuhb7nl4r1rsgti4dv2d8n5lek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW14Bp0OXteWFtpLrdQAAkkWIwNAsaomc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1098093977884-tiqf1avuhb7nl4r1rsgti4dv2d8n5lek.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1098093977884-v5eli5tlgkeqp70t1ihqdc1a1hev6jir.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flutterflow.xbcad"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
