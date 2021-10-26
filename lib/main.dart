@@ -49,13 +49,12 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: const [Locale('en', '')],
       theme: ThemeData(primarySwatch: Colors.blue),
       home: initialUser == null
-          ? const Center(
-              child: SizedBox(
-                width: 50,
-                height: 50,
-                child: SpinKitWanderingCubes(
-                  color: Color(0xFFFC5B3F),
-                  size: 50,
+          ? Container(
+              color: Colors.transparent,
+              child: Builder(
+                builder: (context) => Image.asset(
+                  'assets/images/politician-giving-his-speech-to-public-2130741_(1).png',
+                  fit: BoxFit.cover,
                 ),
               ),
             )
