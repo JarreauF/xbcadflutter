@@ -185,9 +185,7 @@ class _EventInfoWidgetState extends State<EventInfoWidget> {
                                   ),
                                   Text(
                                     '200',
-                                    style: FlutterFlowTheme.title1.override(
-                                      fontFamily: 'Roboto',
-                                    ),
+                                    style: FlutterFlowTheme.title1,
                                   )
                                 ],
                               ),
