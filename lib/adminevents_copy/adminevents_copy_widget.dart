@@ -11,7 +11,7 @@ class AdmineventsCopyWidget extends StatefulWidget {
     this.booking,
   }) : super(key: key);
 
-  final EventBookingRecord booking;
+  final PostEventRecord booking;
 
   @override
   _AdmineventsCopyWidgetState createState() => _AdmineventsCopyWidgetState();
