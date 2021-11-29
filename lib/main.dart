@@ -3,16 +3,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'auth/firebase_user_provider.dart';
+import 'auth/auth_util.dart';
 
 import '../flutter_flow/flutter_flow_theme.dart';
-import 'package:xbcad/home_page/home_page_widget.dart';
+import 'package:xbcad/login/login_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'home_page/home_page_widget.dart';
 import 'create_event/create_event_widget.dart';
 import 'event_ticket/event_ticket_widget.dart';
 import 'profile/profile_widget.dart';
+import 'adminevents/adminevents_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,12 +30,20 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Stream<XbcadFirebaseUser> userStream;
   XbcadFirebaseUser initialUser;
+  final authUserSub = authenticatedUserStream.listen((_) {});
 
   @override
   void initState() {
     super.initState();
     userStream = xbcadFirebaseUserStream()
       ..listen((user) => initialUser ?? setState(() => initialUser = user));
+  }
+
+  @override
+  void dispose() {
+    authUserSub.cancel();
+
+    super.dispose();
   }
 
   @override
@@ -50,17 +59,17 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: initialUser == null
           ? Container(
-              color: Colors.transparent,
+              color: Color(0xFFFC5B3F),
               child: Builder(
                 builder: (context) => Image.asset(
-                  'assets/images/politician-giving-his-speech-to-public-2130741_(1).png',
+                  'assets/images/Gradient_Icon_Map_Navigation_App_Logo.png',
                   fit: BoxFit.cover,
                 ),
               ),
             )
           : currentUser.loggedIn
               ? NavBarPage()
-              : HomePageWidget(),
+              : LoginWidget(),
     );
   }
 }
@@ -76,7 +85,7 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPage = 'CreateEvent';
+  String _currentPage = 'HomePage';
 
   @override
   void initState() {
@@ -91,6 +100,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'CreateEvent': CreateEventWidget(),
       'EventTicket': EventTicketWidget(),
       'Profile': ProfileWidget(),
+      'adminevents': AdmineventsWidget(),
     };
     return Scaffold(
       body: tabs[_currentPage],
@@ -126,6 +136,18 @@ class _NavBarPageState extends State<NavBarPage> {
               size: 24,
             ),
             label: 'Profile',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.admin_panel_settings,
+              size: 24,
+            ),
+            activeIcon: Icon(
+              Icons.admin_panel_settings,
+              size: 24,
+            ),
+            label: 'Admin',
             tooltip: '',
           )
         ],

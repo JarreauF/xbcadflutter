@@ -24,13 +24,51 @@ abstract class EventBookingRecord
   BuiltList<DocumentReference> get bookingName;
 
   @nullable
+  @BuiltValueField(wireName: 'event_name')
+  String get eventName;
+
+  @nullable
+  @BuiltValueField(wireName: 'event_start_time')
+  String get eventStartTime;
+
+  @nullable
+  @BuiltValueField(wireName: 'event_end_time')
+  String get eventEndTime;
+
+  @nullable
+  @BuiltValueField(wireName: 'event_location')
+  String get eventLocation;
+
+  @nullable
+  @BuiltValueField(wireName: 'User')
+  String get user;
+
+  @nullable
+  @BuiltValueField(wireName: 'Ticketbooked')
+  int get ticketbooked;
+
+  @nullable
+  String get admin;
+
+  @nullable
+  String get eventimage;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
   static void _initializeBuilder(EventBookingRecordBuilder builder) => builder
     ..eventDetails = ListBuilder()
     ..seatQty = 0
-    ..bookingName = ListBuilder();
+    ..bookingName = ListBuilder()
+    ..eventName = ''
+    ..eventStartTime = ''
+    ..eventEndTime = ''
+    ..eventLocation = ''
+    ..user = ''
+    ..ticketbooked = 0
+    ..admin = ''
+    ..eventimage = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('event_booking');
@@ -52,10 +90,26 @@ abstract class EventBookingRecord
 
 Map<String, dynamic> createEventBookingRecordData({
   int seatQty,
+  String eventName,
+  String eventStartTime,
+  String eventEndTime,
+  String eventLocation,
+  String user,
+  int ticketbooked,
+  String admin,
+  String eventimage,
 }) =>
     serializers.toFirestore(
         EventBookingRecord.serializer,
         EventBookingRecord((e) => e
           ..eventDetails = null
           ..seatQty = seatQty
-          ..bookingName = null));
+          ..bookingName = null
+          ..eventName = eventName
+          ..eventStartTime = eventStartTime
+          ..eventEndTime = eventEndTime
+          ..eventLocation = eventLocation
+          ..user = user
+          ..ticketbooked = ticketbooked
+          ..admin = admin
+          ..eventimage = eventimage));
