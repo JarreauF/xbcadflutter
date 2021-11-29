@@ -55,11 +55,10 @@ class _AdmineventsWidgetState extends State<AdmineventsWidget> {
                       Divider(),
                       Expanded(
                         child: AuthUserStreamWidget(
-                          child: StreamBuilder<List<EventBookingRecord>>(
-                            stream: queryEventBookingRecord(
-                              queryBuilder: (eventBookingRecord) =>
-                                  eventBookingRecord.where('admin',
-                                      isEqualTo: currentUserEmail),
+                          child: StreamBuilder<List<PostEventRecord>>(
+                            stream: queryPostEventRecord(
+                              queryBuilder: (postEventRecord) => postEventRecord
+                                  .where('admin', isEqualTo: currentUserEmail),
                             ),
                             builder: (context, snapshot) {
                               // Customize what your widget looks like when it's loading.
@@ -74,17 +73,16 @@ class _AdmineventsWidgetState extends State<AdmineventsWidget> {
                                   ),
                                 );
                               }
-                              List<EventBookingRecord>
-                                  columnEventBookingRecordList = snapshot.data;
+                              List<PostEventRecord> columnPostEventRecordList =
+                                  snapshot.data;
                               return SingleChildScrollView(
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   children: List.generate(
-                                      columnEventBookingRecordList.length,
+                                      columnPostEventRecordList.length,
                                       (columnIndex) {
-                                    final columnEventBookingRecord =
-                                        columnEventBookingRecordList[
-                                            columnIndex];
+                                    final columnPostEventRecord =
+                                        columnPostEventRecordList[columnIndex];
                                     return Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 2, 0, 0),
@@ -105,10 +103,7 @@ class _AdmineventsWidgetState extends State<AdmineventsWidget> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        AdmineventsCopyWidget(
-                                                      booking:
-                                                          columnEventBookingRecord,
-                                                    ),
+                                                        AdmineventsCopyWidget(),
                                                   ),
                                                 );
                                               },
@@ -129,8 +124,8 @@ class _AdmineventsWidgetState extends State<AdmineventsWidget> {
                                                               BorderRadius
                                                                   .circular(8),
                                                           child: Image.network(
-                                                            columnEventBookingRecord
-                                                                .eventimage,
+                                                            columnPostEventRecord
+                                                                .imgUrl,
                                                             width: 74,
                                                             height: 74,
                                                             fit: BoxFit.cover,
@@ -158,10 +153,10 @@ class _AdmineventsWidgetState extends State<AdmineventsWidget> {
                                                                     .max,
                                                             children: [
                                                               AutoSizeText(
-                                                                columnEventBookingRecord
+                                                                columnPostEventRecord
                                                                     .eventName
                                                                     .maybeHandleOverflow(
-                                                                  maxChars: 20,
+                                                                  maxChars: 15,
                                                                   replacement:
                                                                       '…',
                                                                 ),
@@ -186,10 +181,10 @@ class _AdmineventsWidgetState extends State<AdmineventsWidget> {
                                                                     .max,
                                                             children: [
                                                               Text(
-                                                                columnEventBookingRecord
+                                                                columnPostEventRecord
                                                                     .eventLocation
                                                                     .maybeHandleOverflow(
-                                                                  maxChars: 30,
+                                                                  maxChars: 15,
                                                                   replacement:
                                                                       '…',
                                                                 ),
@@ -221,7 +216,7 @@ class _AdmineventsWidgetState extends State<AdmineventsWidget> {
                                                                   queryBuilder: (postEventRecord) => postEventRecord.where(
                                                                       'event_name',
                                                                       isEqualTo:
-                                                                          columnEventBookingRecord
+                                                                          columnPostEventRecord
                                                                               .eventName),
                                                                   singleRecord:
                                                                       true,
