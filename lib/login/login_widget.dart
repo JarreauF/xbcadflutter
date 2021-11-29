@@ -4,7 +4,6 @@ import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginWidget extends StatefulWidget {
@@ -44,16 +43,28 @@ class _LoginWidgetState extends State<LoginWidget> {
         child: Stack(
           children: [
             Align(
-              alignment: AlignmentDirectional(0.06, -0.63),
-              child: Image.asset(
-                'assets/images/politician-giving-his-speech-to-public-2130741_(1).png',
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.5,
-                fit: BoxFit.contain,
+              alignment: AlignmentDirectional(0, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: AlignmentDirectional(0, 0),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 80, 0, 0),
+                      child: Image.asset(
+                        'assets/images/Gradient_Icon_Map_Navigation_App_Logo.png',
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
             Align(
-              alignment: AlignmentDirectional(0, 0.67),
+              alignment: AlignmentDirectional(0, 0.4),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -166,6 +177,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     passwordVisibility
                                         ? Icons.visibility_outlined
                                         : Icons.visibility_off_outlined,
+                                    color: Colors.white,
                                     size: 22,
                                   ),
                                 ),
@@ -175,14 +187,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                                 color: Colors.white,
                                 fontSize: 18,
                               ),
-                            ),
-                          ),
-                          Align(
-                            alignment: AlignmentDirectional(0.95, 0.5),
-                            child: Icon(
-                              Icons.lock_open,
-                              color: Colors.white,
-                              size: 24,
                             ),
                           )
                         ],
@@ -212,7 +216,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      NavBarPage(initialPage: 'CreateEvent'),
+                                      NavBarPage(initialPage: 'HomePage'),
                                 ),
                                 (r) => false,
                               );
@@ -258,7 +262,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        NavBarPage(initialPage: 'CreateEvent'),
+                                        NavBarPage(initialPage: 'HomePage'),
                                   ),
                                   (r) => false,
                                 );
@@ -287,14 +291,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                           ),
                         )
                       ],
-                    ),
-                  ),
-                  Text(
-                    'Forgot Password?',
-                    style: GoogleFonts.getFont(
-                      'Lato',
-                      color: FlutterFlowTheme.tertiaryColor,
-                      fontSize: 16,
                     ),
                   )
                 ],

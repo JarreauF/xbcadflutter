@@ -12,39 +12,59 @@ abstract class PostEventRecord
       _$postEventRecordSerializer;
 
   @nullable
-  @BuiltValueField(wireName: 'img_url')
-  String get imgUrl;
-
-  @nullable
-  @BuiltValueField(wireName: 'event_detail')
-  String get eventDetail;
+  @BuiltValueField(wireName: 'event_name')
+  String get eventName;
 
   @nullable
   @BuiltValueField(wireName: 'event_location')
-  LatLng get eventLocation;
+  String get eventLocation;
 
   @nullable
   @BuiltValueField(wireName: 'event_host')
   String get eventHost;
 
   @nullable
-  @BuiltValueField(wireName: 'event_time')
-  String get eventTime;
+  @BuiltValueField(wireName: 'event_start_time')
+  String get eventStartTime;
+
+  @nullable
+  @BuiltValueField(wireName: 'event_end_time')
+  String get eventEndTime;
 
   @nullable
   @BuiltValueField(wireName: 'event_capacity')
   int get eventCapacity;
 
   @nullable
+  @BuiltValueField(wireName: 'event_description')
+  String get eventDescription;
+
+  @nullable
+  @BuiltValueField(wireName: 'event_category')
+  String get eventCategory;
+
+  @nullable
+  @BuiltValueField(wireName: 'img_url')
+  String get imgUrl;
+
+  @nullable
+  String get admin;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
   static void _initializeBuilder(PostEventRecordBuilder builder) => builder
-    ..imgUrl = ''
-    ..eventDetail = ''
+    ..eventName = ''
+    ..eventLocation = ''
     ..eventHost = ''
-    ..eventTime = ''
-    ..eventCapacity = 0;
+    ..eventStartTime = ''
+    ..eventEndTime = ''
+    ..eventCapacity = 0
+    ..eventDescription = ''
+    ..eventCategory = ''
+    ..imgUrl = ''
+    ..admin = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('post_event');
@@ -64,19 +84,27 @@ abstract class PostEventRecord
 }
 
 Map<String, dynamic> createPostEventRecordData({
-  String imgUrl,
-  String eventDetail,
-  LatLng eventLocation,
+  String eventName,
+  String eventLocation,
   String eventHost,
-  String eventTime,
+  String eventStartTime,
+  String eventEndTime,
   int eventCapacity,
+  String eventDescription,
+  String eventCategory,
+  String imgUrl,
+  String admin,
 }) =>
     serializers.toFirestore(
         PostEventRecord.serializer,
         PostEventRecord((p) => p
-          ..imgUrl = imgUrl
-          ..eventDetail = eventDetail
+          ..eventName = eventName
           ..eventLocation = eventLocation
           ..eventHost = eventHost
-          ..eventTime = eventTime
-          ..eventCapacity = eventCapacity));
+          ..eventStartTime = eventStartTime
+          ..eventEndTime = eventEndTime
+          ..eventCapacity = eventCapacity
+          ..eventDescription = eventDescription
+          ..eventCategory = eventCategory
+          ..imgUrl = imgUrl
+          ..admin = admin));

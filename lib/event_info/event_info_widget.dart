@@ -1,15 +1,24 @@
+import '../auth/auth_util.dart';
+import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_count_controller.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import '../main.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EventInfoWidget extends StatefulWidget {
-  EventInfoWidget({Key key}) : super(key: key);
+  EventInfoWidget({
+    Key key,
+    this.event,
+  }) : super(key: key);
+
+  final PostEventRecord event;
 
   @override
   _EventInfoWidgetState createState() => _EventInfoWidgetState();
@@ -51,7 +60,7 @@ class _EventInfoWidgetState extends State<EventInfoWidget> {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: Image.network(
-                              'https://picsum.photos/seed/940/600',
+                              widget.event.imgUrl,
                             ).image,
                           ),
                         ),
@@ -71,8 +80,14 @@ class _EventInfoWidgetState extends State<EventInfoWidget> {
                                   color: Colors.white,
                                   size: 30,
                                 ),
-                                onPressed: () {
-                                  print('IconButton pressed ...');
+                                onPressed: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          NavBarPage(initialPage: 'HomePage'),
+                                    ),
+                                  );
                                 },
                               )
                             ],
@@ -116,7 +131,11 @@ class _EventInfoWidgetState extends State<EventInfoWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0, 20, 0, 0),
                                         child: Text(
-                                          'Bruno Mars',
+                                          widget.event.eventName
+                                              .maybeHandleOverflow(
+                                            maxChars: 30,
+                                            replacement: '…',
+                                          ),
                                           style:
                                               FlutterFlowTheme.title1.override(
                                             fontFamily: 'Roboto',
@@ -125,8 +144,12 @@ class _EventInfoWidgetState extends State<EventInfoWidget> {
                                           ),
                                         ),
                                       ),
-                                      Text(
-                                        '12 May. 8:00 - 10:00 pm',
+                                      AutoSizeText(
+                                        '${widget.event.eventStartTime} - ${widget.event.eventEndTime}'
+                                            .maybeHandleOverflow(
+                                          maxChars: 30,
+                                          replacement: '…',
+                                        ),
                                         style:
                                             FlutterFlowTheme.bodyText1.override(
                                           fontFamily: 'Roboto',
@@ -157,7 +180,7 @@ class _EventInfoWidgetState extends State<EventInfoWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 5, 30, 20),
                               child: Text(
-                                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+                                widget.event.eventDescription,
                                 style: FlutterFlowTheme.bodyText1.override(
                                   fontFamily: 'Roboto',
                                   fontSize: 12,
@@ -184,7 +207,7 @@ class _EventInfoWidgetState extends State<EventInfoWidget> {
                                     ),
                                   ),
                                   Text(
-                                    '200',
+                                    widget.event.eventCapacity.toString(),
                                     style: FlutterFlowTheme.title1,
                                   )
                                 ],
@@ -255,11 +278,50 @@ class _EventInfoWidgetState extends State<EventInfoWidget> {
                                     updateCount: (count) => setState(
                                         () => countControllerValue = count),
                                     stepSize: 1,
+                                    minimum: 0,
+                                    maximum: 1,
                                   ),
                                 ),
                                 FFButtonWidget(
-                                  onPressed: () {
-                                    print('Button pressed ...');
+                                  onPressed: () async {
+                                    setState(() => _loadingButton = true);
+                                    try {
+                                      if ((countControllerValue) > (0)) {
+                                        final eventBookingCreateData = {
+                                          ...createEventBookingRecordData(
+                                            seatQty: countControllerValue,
+                                            eventName: widget.event.eventName,
+                                            eventStartTime:
+                                                widget.event.eventStartTime,
+                                            eventEndTime:
+                                                widget.event.eventEndTime,
+                                            eventLocation:
+                                                widget.event.eventLocation,
+                                            user: currentUserEmail,
+                                            ticketbooked:
+                                                widget.event.eventCapacity,
+                                            eventimage: widget.event.imgUrl,
+                                            admin: widget.event.admin,
+                                          ),
+                                          'event_details':
+                                              FieldValue.arrayUnion(
+                                                  [widget.event.reference]),
+                                          'booking_name': FieldValue.arrayUnion(
+                                              [currentUserReference]),
+                                        };
+                                        await EventBookingRecord.collection
+                                            .doc()
+                                            .set(eventBookingCreateData);
+                                      }
+                                      final postEventUpdateData = {
+                                        'event_capacity':
+                                            FieldValue.increment(-1),
+                                      };
+                                      await widget.event.reference
+                                          .update(postEventUpdateData);
+                                    } finally {
+                                      setState(() => _loadingButton = false);
+                                    }
                                   },
                                   text: 'Book',
                                   options: FFButtonOptions(

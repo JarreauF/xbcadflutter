@@ -1,10 +1,13 @@
+import '../auth/auth_util.dart';
+import '../backend/backend.dart';
+import '../backend/firebase_storage/storage.dart';
 import '../flutter_flow/flutter_flow_drop_down.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/upload_media.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CreateEventWidget extends StatefulWidget {
@@ -16,6 +19,7 @@ class CreateEventWidget extends StatefulWidget {
 
 class _CreateEventWidgetState extends State<CreateEventWidget> {
   String dropDownValue;
+  String uploadedFileUrl = '';
   TextEditingController textController1;
   TextEditingController textController2;
   TextEditingController textController3;
@@ -54,24 +58,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
-            child: FlutterFlowIconButton(
-              borderColor: Colors.transparent,
-              borderRadius: 30,
-              buttonSize: 48,
-              icon: Icon(
-                Icons.close_rounded,
-                color: Color(0xFF95A1AC),
-                size: 30,
-              ),
-              onPressed: () async {
-                Navigator.pop(context);
-              },
-            ),
-          )
-        ],
+        actions: [],
         centerTitle: false,
         elevation: 0,
       ),
@@ -97,25 +84,55 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                         children: [
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.96,
-                              height: 350,
-                              decoration: BoxDecoration(
-                                color: Color(0xFFF1F5F8),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: Image.asset(
-                                    'assets/images/emptyState@2x.png',
-                                  ).image,
+                            child: InkWell(
+                              onTap: () async {
+                                final selectedMedia =
+                                    await selectMediaWithSourceBottomSheet(
+                                  context: context,
+                                  allowPhoto: true,
+                                );
+                                if (selectedMedia != null &&
+                                    validateFileFormat(
+                                        selectedMedia.storagePath, context)) {
+                                  showUploadMessage(
+                                      context, 'Uploading file...',
+                                      showLoading: true);
+                                  final downloadUrl = await uploadData(
+                                      selectedMedia.storagePath,
+                                      selectedMedia.bytes);
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentSnackBar();
+                                  if (downloadUrl != null) {
+                                    setState(
+                                        () => uploadedFileUrl = downloadUrl);
+                                    showUploadMessage(context, 'Success!');
+                                  } else {
+                                    showUploadMessage(
+                                        context, 'Failed to upload media');
+                                    return;
+                                  }
+                                }
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.96,
+                                height: 350,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFF1F5F8),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: Image.asset(
+                                      'assets/images/emptyState@2x.png',
+                                    ).image,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 6,
+                                      color: Color(0x3A000000),
+                                      offset: Offset(0, 2),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 6,
-                                    color: Color(0x3A000000),
-                                    offset: Offset(0, 2),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                           ),
@@ -476,8 +493,30 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 10),
                 child: FFButtonWidget(
-                  onPressed: () {
-                    print('Button pressed ...');
+                  onPressed: () async {
+                    setState(() => _loadingButton = true);
+                    try {
+                      final postEventCreateData = createPostEventRecordData(
+                        imgUrl: uploadedFileUrl,
+                        eventLocation: textController2.text,
+                        eventHost: textController3.text,
+                        eventCapacity: int.parse(textController6.text),
+                        eventDescription: textController7.text,
+                        eventName: textController1.text,
+                        eventStartTime: textController4.text,
+                        eventEndTime: textController5.text,
+                        eventCategory: valueOrDefault<String>(
+                          dropDownValue,
+                          'Seminar',
+                        ),
+                        admin: currentUserEmail,
+                      );
+                      await PostEventRecord.collection
+                          .doc()
+                          .set(postEventCreateData);
+                    } finally {
+                      setState(() => _loadingButton = false);
+                    }
                   },
                   text: 'Create Event',
                   options: FFButtonOptions(
