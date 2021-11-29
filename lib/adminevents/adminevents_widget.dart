@@ -107,8 +107,7 @@ class _AdmineventsWidgetState extends State<AdmineventsWidget> {
                                                     builder: (context) =>
                                                         AdmineventsCopyWidget(
                                                       booking:
-                                                          columnEventBookingRecord
-                                                              .reference,
+                                                          columnEventBookingRecord,
                                                     ),
                                                   ),
                                                 );
@@ -162,7 +161,7 @@ class _AdmineventsWidgetState extends State<AdmineventsWidget> {
                                                                 columnEventBookingRecord
                                                                     .eventName
                                                                     .maybeHandleOverflow(
-                                                                  maxChars: 30,
+                                                                  maxChars: 20,
                                                                   replacement:
                                                                       '…',
                                                                 ),
