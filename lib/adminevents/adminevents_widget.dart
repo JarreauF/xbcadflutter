@@ -103,7 +103,10 @@ class _AdmineventsWidgetState extends State<AdmineventsWidget> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        AdmineventsCopyWidget(),
+                                                        AdmineventsCopyWidget(
+                                                      booking:
+                                                          columnPostEventRecord,
+                                                    ),
                                                   ),
                                                 );
                                               },
