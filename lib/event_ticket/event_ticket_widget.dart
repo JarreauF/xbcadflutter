@@ -310,7 +310,7 @@ class _EventTicketWidgetState extends State<EventTicketWidget> {
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
-                                                0.1,
+                                                0.05,
                                             fit: BoxFit.cover,
                                           ),
                                         )

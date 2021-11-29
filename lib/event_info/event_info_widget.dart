@@ -133,7 +133,7 @@ class _EventInfoWidgetState extends State<EventInfoWidget> {
                                         child: Text(
                                           widget.event.eventName
                                               .maybeHandleOverflow(
-                                            maxChars: 30,
+                                            maxChars: 15,
                                             replacement: '…',
                                           ),
                                           style:
@@ -232,116 +232,130 @@ class _EventInfoWidgetState extends State<EventInfoWidget> {
                                 color: Color(0xFFA8A8A8),
                               ),
                             ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.07,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(25),
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(
-                                      color: FlutterFlowTheme.tertiaryColor,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: FlutterFlowCountController(
-                                    decrementIconBuilder: (enabled) => FaIcon(
-                                      FontAwesomeIcons.minus,
-                                      color: enabled
-                                          ? Colors.black
-                                          : Color(0xFFEEEEEE),
-                                      size: 20,
-                                    ),
-                                    incrementIconBuilder: (enabled) => FaIcon(
-                                      FontAwesomeIcons.plus,
-                                      color: enabled
-                                          ? Colors.black
-                                          : Color(0xFFEEEEEE),
-                                      size: 20,
-                                    ),
-                                    countBuilder: (count) => Text(
-                                      count.toString(),
-                                      style: GoogleFonts.getFont(
-                                        'Roboto',
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 20, 0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.07,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(25),
+                                      shape: BoxShape.rectangle,
+                                      border: Border.all(
+                                        color: FlutterFlowTheme.tertiaryColor,
+                                        width: 1,
                                       ),
                                     ),
-                                    count: countControllerValue ??= 0,
-                                    updateCount: (count) => setState(
-                                        () => countControllerValue = count),
-                                    stepSize: 1,
-                                    minimum: 0,
-                                    maximum: 1,
-                                  ),
-                                ),
-                                FFButtonWidget(
-                                  onPressed: () async {
-                                    setState(() => _loadingButton = true);
-                                    try {
-                                      if ((countControllerValue) > (0)) {
-                                        final eventBookingCreateData = {
-                                          ...createEventBookingRecordData(
-                                            seatQty: countControllerValue,
-                                            eventName: widget.event.eventName,
-                                            eventStartTime:
-                                                widget.event.eventStartTime,
-                                            eventEndTime:
-                                                widget.event.eventEndTime,
-                                            eventLocation:
-                                                widget.event.eventLocation,
-                                            user: currentUserEmail,
-                                            ticketbooked:
-                                                widget.event.eventCapacity,
-                                            eventimage: widget.event.imgUrl,
-                                            admin: widget.event.admin,
-                                          ),
-                                          'event_details':
-                                              FieldValue.arrayUnion(
-                                                  [widget.event.reference]),
-                                          'booking_name': FieldValue.arrayUnion(
-                                              [currentUserReference]),
-                                        };
-                                        await EventBookingRecord.collection
-                                            .doc()
-                                            .set(eventBookingCreateData);
-                                      }
-                                      final postEventUpdateData = {
-                                        'event_capacity':
-                                            FieldValue.increment(-1),
-                                      };
-                                      await widget.event.reference
-                                          .update(postEventUpdateData);
-                                    } finally {
-                                      setState(() => _loadingButton = false);
-                                    }
-                                  },
-                                  text: 'Book',
-                                  options: FFButtonOptions(
-                                    width: 200,
-                                    height: 50,
-                                    color: Color(0xFFFC5B3F),
-                                    textStyle:
-                                        FlutterFlowTheme.subtitle2.override(
-                                      fontFamily: 'Roboto',
-                                      color: Colors.white,
+                                    child: FlutterFlowCountController(
+                                      decrementIconBuilder: (enabled) => FaIcon(
+                                        FontAwesomeIcons.minus,
+                                        color: enabled
+                                            ? Colors.black
+                                            : Color(0xFFEEEEEE),
+                                        size: 20,
+                                      ),
+                                      incrementIconBuilder: (enabled) => FaIcon(
+                                        FontAwesomeIcons.plus,
+                                        color: enabled
+                                            ? Colors.black
+                                            : Color(0xFFEEEEEE),
+                                        size: 20,
+                                      ),
+                                      countBuilder: (count) => Text(
+                                        count.toString(),
+                                        style: GoogleFonts.getFont(
+                                          'Roboto',
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      count: countControllerValue ??= 0,
+                                      updateCount: (count) => setState(
+                                          () => countControllerValue = count),
+                                      stepSize: 1,
+                                      minimum: 0,
+                                      maximum: 1,
                                     ),
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                      width: 1,
-                                    ),
-                                    borderRadius: 0,
                                   ),
-                                  loading: _loadingButton,
-                                )
-                              ],
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 0, 1, 0),
+                                    child: FFButtonWidget(
+                                      onPressed: () async {
+                                        setState(() => _loadingButton = true);
+                                        try {
+                                          if ((countControllerValue) > (0)) {
+                                            final eventBookingCreateData = {
+                                              ...createEventBookingRecordData(
+                                                seatQty: countControllerValue,
+                                                eventName:
+                                                    widget.event.eventName,
+                                                eventStartTime:
+                                                    widget.event.eventStartTime,
+                                                eventEndTime:
+                                                    widget.event.eventEndTime,
+                                                eventLocation:
+                                                    widget.event.eventLocation,
+                                                user: currentUserEmail,
+                                                ticketbooked:
+                                                    widget.event.eventCapacity,
+                                                eventimage: widget.event.imgUrl,
+                                                admin: widget.event.admin,
+                                              ),
+                                              'event_details':
+                                                  FieldValue.arrayUnion(
+                                                      [widget.event.reference]),
+                                              'booking_name':
+                                                  FieldValue.arrayUnion(
+                                                      [currentUserReference]),
+                                            };
+                                            await EventBookingRecord.collection
+                                                .doc()
+                                                .set(eventBookingCreateData);
+                                          }
+                                          if ((countControllerValue) > (0)) {
+                                            final postEventUpdateData = {
+                                              'event_capacity':
+                                                  FieldValue.increment(-1),
+                                            };
+                                            await widget.event.reference
+                                                .update(postEventUpdateData);
+                                          }
+                                        } finally {
+                                          setState(
+                                              () => _loadingButton = false);
+                                        }
+                                      },
+                                      text: 'Book',
+                                      options: FFButtonOptions(
+                                        width: 155,
+                                        height: 50,
+                                        color: Color(0xFFFC5B3F),
+                                        textStyle:
+                                            FlutterFlowTheme.subtitle2.override(
+                                          fontFamily: 'Roboto',
+                                          color: Colors.white,
+                                        ),
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                          width: 1,
+                                        ),
+                                        borderRadius: 0,
+                                      ),
+                                      loading: _loadingButton,
+                                    ),
+                                  )
+                                ],
+                              ),
                             )
                           ],
                         ),

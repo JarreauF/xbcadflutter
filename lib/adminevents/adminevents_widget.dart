@@ -111,7 +111,7 @@ class _AdmineventsWidgetState extends State<AdmineventsWidget> {
                                                 );
                                               },
                                               child: Row(
-                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Column(
                                                     mainAxisSize:
